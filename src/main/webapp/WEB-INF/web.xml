@@ -1,0 +1,19 @@
+<!DOCTYPE web-app PUBLIC
+ "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
+ "http://java.sun.com/dtd/web-app_2_3.dtd" >
+
+<web-app>
+	<display-name>Archetype Created Web Application</display-name>
+	<servlet>
+		<servlet-name>RemoveProductController</servlet-name>
+		<display-name>RemoveProductController</display-name>
+		<description></description>
+		<servlet-class>com.emxcel.InventoryProduct.RemoveProductController</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>RemoveProductController</servlet-name>
+		<url-pattern>/RemoveProductController</url-pattern>
+	</servlet-mapping>
+	
+
+</web-app>
