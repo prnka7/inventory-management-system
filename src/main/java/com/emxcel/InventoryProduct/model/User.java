@@ -8,9 +8,24 @@ import javax.persistence.*;
 @Table(name = "tbl_user")
 public class User {
 	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@Column(name="user_id")
 	private long user_id;
+	
+	@Column(name="user_name")
 	private String user_name;
+	
+	@Column(name="user_password")
 	private String user_password;
+	
+	@ManyToMany
+	@JoinTable(name = "tbl_user_role", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
+	private List<Role> likedrole_user;
+
+	public User()
+	{
+		
+	}
 
 	public long getUser_id() {
 		return user_id;
@@ -36,10 +51,6 @@ public class User {
 		this.user_password = user_password;
 	}
 
-	@ManyToMany
-	@JoinTable(name = "tbl_user_role", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
-	List<Role> likedrole_user;
-
 	public List<Role> getLikedrole_user() {
 		return likedrole_user;
 	}
@@ -48,9 +59,9 @@ public class User {
 		this.likedrole_user = likedrole_user;
 	}
 
-	@Override
-	public String toString() {
-		return "User [user_id=" + user_id + ", user_name=" + user_name + ", user_password=" + user_password + "]";
-	}
+//	@Override
+//	public String toString() {
+//		return "User [user_id=" + user_id + ", user_name=" + user_name + ", user_password=" + user_password + "]";
+//	}
 
 }

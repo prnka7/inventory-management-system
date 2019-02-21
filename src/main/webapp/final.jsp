@@ -7,66 +7,59 @@
 <head>
 <meta charset="ISO-8859-1">
 <title>Insert title here</title>
-</head>
 <style>
-input[type=text]:enabled {
-	background: green;
+ul {
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+	overflow: hidden;
+	background-color: #333;
+	fonr-color: black;
 }
 
-input[type=text]:disabled {
-	background: white;
+li {
+	float: left;
 }
 
-input {
-	width: 150px;
-	padding-left: 10px;
-	margin-top: 10px;
-	border: 1px solid black;
+li a {
+	display: block;
+	color: white;
+	text-align: center;
+	padding: 14px 16px;
+	text-decoration: none;
 }
 
-body {
-	text-align: left;
+li
+a
+:hover
+:not
+(
+.active
+)
+{background-color:#111;
+}.active {
+	background-color: #4CAF50;
 }
 </style>
+</head>
 <body>
-	<form name="ProductMenu" action="ProductMenu" method="get">
 
 
-		<input type="button" value="AddProduct" name="product"
-			onclick="openPage('AddProduct.jsp')" />
 
-	</form>
-	<script type="text/javascript">
-		function openPage(pageURL) {
-			window.location.href = pageURL;
-		}
-	</script>
-	<h3>Role List of the User</h3>
-	<%
-		List<Role> rolelist = (List<Role>) request.getAttribute("rolelist");
-		for (Role role : rolelist) {
-			switch (role.getRole_name()) {
-				case "admin" :
-					out.println("User role is " + role.getRole_name());
-	%>
-	document.getElementById("scan").disabled = true;
-	<%
-		break;
-				case "superadmin" :
-					out.println("User role is " + role.getRole_name());
-					break;
-				case "customer" :
-					out.println("User role is " + role.getRole_name());
-					break;
-				default :
-					break;
-			}
-		}
-	%><br>
 
-	</body>
-<script>
-	function admin() {
-	}
-</script>
+
+	<br>
+<body>
+
+
+
+	<ul>
+		<li><a class="active" href="#home">Home</a></li>
+		<li><a href="listrole" id="link1">Profile</a></li>
+		<li><a href="ShowProductController">Events</a></li>
+		<li><a href="logout">Logout</a></li>
+	</ul>
+
+</body>
+
 </html>

@@ -4,16 +4,10 @@
 
 <web-app>
 	<display-name>Archetype Created Web Application</display-name>
-	<servlet>
-		<servlet-name>RemoveProductController</servlet-name>
-		<display-name>RemoveProductController</display-name>
-		<description></description>
-		<servlet-class>com.emxcel.InventoryProduct.RemoveProductController</servlet-class>
-	</servlet>
-	<servlet-mapping>
-		<servlet-name>RemoveProductController</servlet-name>
-		<url-pattern>/RemoveProductController</url-pattern>
-	</servlet-mapping>
+	
+	
+	
+	
 	
 
 </web-app>

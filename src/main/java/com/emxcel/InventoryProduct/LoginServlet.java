@@ -13,6 +13,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.mindrot.jbcrypt.BCrypt;
 
@@ -35,8 +36,16 @@ public class LoginServlet extends HttpServlet {
 		boolean matched = BCrypt.checkpw(password, u1.getUser_password());
 		List<Role> rolelist = u1.getLikedrole_user();
 		if (matched) {
-			request.setAttribute("rolelist", rolelist);
-			request.getRequestDispatcher("final.jsp").forward(request, response);
+			HttpSession oldSession = request.getSession(false);
+			if (oldSession != null) {
+				oldSession.invalidate();
+			}
+
+			HttpSession session = request.getSession(true);
+			session.setAttribute("rolelist", rolelist);
+			session.setAttribute("uname", username);
+			session.setAttribute("pwd", password);
+			request.getRequestDispatcher("final.jsp").include(request, response);
 			
 			System.out.println("Login Success!");
 		} else {

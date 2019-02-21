@@ -39,11 +39,8 @@ public class AddProductController extends HttpServlet {
 		p.setProduct_name(product_name);
 		p.setProduct_price(product_price);
 		p.setProduct_qty(product_quantity);
-		
 		ProductDAO dao=new ProductDAO();
 		dao.save(p);
-		/*request.setAttribute("product", p);
-		request.getRequestDispatcher("final.jsp").forward(request, response);*/
 		RequestDispatcher rd=request.getRequestDispatcher("/AddProduct.jsp");  
         rd.include(request, response);  
 		

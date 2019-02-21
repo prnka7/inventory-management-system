@@ -29,7 +29,7 @@ public class ShowProductController extends HttpServlet {
 			System.out.println(p1);
 		}
 		request.setAttribute("listp", listp);
-		request.getRequestDispatcher("ShowProduct.jsp").include(request, response);
+		request.getRequestDispatcher("Event.jsp").include(request, response);
 
 		System.out.println("You are in show product controller");
 		

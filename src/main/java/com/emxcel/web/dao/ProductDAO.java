@@ -1,11 +1,6 @@
 package com.emxcel.web.dao;
 
 import java.util.List;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
-import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
-import org.hibernate.cfg.Configuration;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
@@ -18,6 +13,7 @@ public class ProductDAO {
 	EntityManager em = emf.createEntityManager();
 	EntityTransaction transaction = em.getTransaction();
 
+Product p=new Product();
 	public void save(Product product) {
 
 		transaction.begin();
@@ -26,10 +22,10 @@ public class ProductDAO {
 		System.out.println("Added");
 		em.close();
 	}
-	public void delete(Product product)
+	public void delete(long id)
 	{
 		transaction.begin();
-		em.remove(product);
+		em.remove(em.find(Product.class,id));
 		transaction.commit();
 		System.out.println("Removed");
 		em.close();
@@ -39,6 +35,15 @@ public class ProductDAO {
 		List<Product> listproduct = em.createQuery("SELECT p FROM Product p").getResultList();
 		em.close();
 			return listproduct;
+	}
+	public void update(Product product)
+	{
+		transaction.begin();
+		em.merge(product);
+		transaction.commit();
+		System.out.println("Updated");
+		em.close();
+		
 	}
 
 }
