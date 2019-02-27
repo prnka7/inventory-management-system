@@ -1,30 +1,45 @@
 package com.emxcel.InventoryProduct.model;
 
+import java.io.Serializable;
 import java.util.List;
 
 import javax.persistence.*;
 
 @Entity
 @Table(name = "tbl_user")
-public class User {
-	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	@Column(name="user_id")
-	private long user_id;
-	
-	@Column(name="user_name")
-	private String user_name;
-	
-	@Column(name="user_password")
-	private String user_password;
-	
-	@ManyToMany
-	@JoinTable(name = "tbl_user_role", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
-	private List<Role> likedrole_user;
+@NamedQuery(name = "User.findAll", query = "SELECT u FROM User u")
+@NamedQuery(name = "User.validPassword", query = "SELECT u FROM User u WHERE u.user_name=:userName")
+public class User implements Serializable {
+	/**
+	 * @author Priyanka Dodiya
+	 */
+	private static final long serialVersionUID = 1L;
 
-	public User()
-	{
-		
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "user_id")
+	private long user_id;
+
+	@Column(name = "user_name")
+	private String user_name;
+
+	@Column(name = "user_password")
+	private String user_password;
+
+	@ManyToMany
+	@JoinTable(
+			name = "tbl_user_role"
+			, joinColumns = {
+					@JoinColumn(name = "user_id")		
+					}
+			, inverseJoinColumns = {
+					@JoinColumn(name = "role_id")
+				}
+			)
+	private List<Role> tblRoles;
+
+	public User() {
+
 	}
 
 	public long getUser_id() {
@@ -51,12 +66,12 @@ public class User {
 		this.user_password = user_password;
 	}
 
-	public List<Role> getLikedrole_user() {
-		return likedrole_user;
+	public List<Role> getTblRoles() {
+		return this.tblRoles;
 	}
 
-	public void setLikedrole_user(List<Role> likedrole_user) {
-		this.likedrole_user = likedrole_user;
+	public void setTblRoles(List<Role> tblRoles) {
+		this.tblRoles = tblRoles;
 	}
 
 //	@Override

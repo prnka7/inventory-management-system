@@ -3,18 +3,15 @@
 <!DOCTYPE html>
 <html>
 <head>
-<link rel="stylesheet" type="text/css" href="style.css">
 <meta charset="ISO-8859-1">
-<title>Index</title>
+<title>Product Form</title>
 </head>
-<body>	<%
+<body>
+	<%
 		response.setHeader("Cache-Control", "no-cache,no-store,must-revalidate");
 	%>
-
-	<h2>Inventory Management System</h2>
-	<a class="button" href="login.jsp">Log In</a>
-	<hr>
-
+	<jsp:include page="link.jsp" />
+	<jsp:include page="productform.html"></jsp:include>
+	
 </body>
-
 </html>

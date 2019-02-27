@@ -1,13 +1,9 @@
 package com.emxcel.InventoryProduct;
 
-import com.emxcel.InventoryProduct.model.*;
 import java.io.IOException;
+import java.io.PrintWriter;
 
-import java.util.List;
-
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
+import javax.persistence.NoResultException;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -15,44 +11,52 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.mindrot.jbcrypt.BCrypt;
+import com.emxcel.InventoryProduct.model.User;
+import com.emxcel.web.dao.UserDAO;
+
+
 
 /**
- * @author Priyanka Dodiya
+ * Servlet implementation class LoginServlet
  */
-@WebServlet("/loginservlet")
+@WebServlet("/login")
 public class LoginServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
-	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		String username = request.getParameter("username");
-		String password = request.getParameter("password");
-
-		EntityManagerFactory emf = Persistence.createEntityManagerFactory("InventoryManagement");
-		EntityManager em = emf.createEntityManager();
-		String select = "select ua FROM User ua WHERE ua.user_name=:username";
-		User u1 = (User) em.createQuery(select).setParameter("username", username).getSingleResult();
-		boolean matched = BCrypt.checkpw(password, u1.getUser_password());
-		List<Role> rolelist = u1.getLikedrole_user();
-		if (matched) {
-			HttpSession oldSession = request.getSession(false);
-			if (oldSession != null) {
-				oldSession.invalidate();
-			}
-
-			HttpSession session = request.getSession(true);
-			session.setAttribute("rolelist", rolelist);
-			session.setAttribute("uname", username);
-			session.setAttribute("pwd", password);
-			request.getRequestDispatcher("final.jsp").include(request, response);
+		PrintWriter out = response.getWriter();
+		UserDAO userDao = new UserDAO();
+		request.getRequestDispatcher("App.jsp").include(request, response);
+		System.out.println("hello");
+		try {
+			String userName = request.getParameter("name");// from JSP
+			String password = request.getParameter("password");// from JSP
+			User user=userDao.getUserFromUserName(userName);
 			
-			System.out.println("Login Success!");
-		} else {
-			System.out.println("User does not exist!");
-		}
-		em.close();
-		
-	}
+			if (userDao.checkUserPassword(user, password)) {
+				// get the old session and invalidate
+				HttpSession oldSession = request.getSession(false);
+				if (oldSession != null) {
+					oldSession.invalidate();
+				}
 
+				HttpSession newSession = request.getSession(true);
+				// session.setMaxInactiveInterval(10*60);
+				newSession.setAttribute("loggeduser", user);
+				// newSession.setAttribute("name", userName);
+				request.getRequestDispatcher("dashboard.jsp").include(request, response);
+
+			} else {
+				out.println("Username or Password Not Valid");
+				request.getRequestDispatcher("login.jsp").include(request, response);
+			}
+		} catch (NoResultException e) {
+			out.print("User not registered! Contact admin!");
+			request.getRequestDispatcher("login.jsp").include(request, response);
+
+		}
+		out.close();
+
+	}
 }

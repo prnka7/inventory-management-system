@@ -14,39 +14,33 @@ import javax.servlet.http.HttpSession;
 import com.emxcel.InventoryProduct.model.Product;
 import com.emxcel.web.dao.ProductDAO;
 
-
 /**
- * Servlet implementation class AddProduct
- */
-@WebServlet("/addproduct")
-public class AddProductController extends HttpServlet {
+* @author Priyanka Dodiya
+*/
+@WebServlet("/editproduct")
+public class EditProduct extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
-	 *      response)
-	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-
-		HttpSession session = request.getSession(false);
+	
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		HttpSession session=request.getSession(false);
 		PrintWriter out = response.getWriter();
 		if (session != null) {
 			Product product = new Product();
+			ProductDAO productDao = new ProductDAO();
+			product.setProduct_id(Long.parseLong(request.getParameter("id")));
 			product.setProduct_name(request.getParameter("name"));
 			product.setProduct_qty(Integer.parseInt(request.getParameter("quantity")));
 			product.setProduct_price(new BigDecimal(request.getParameter("price")));
-			ProductDAO productDao = new ProductDAO();
-			if (productDao.create(product)) {
-				response.sendRedirect("addProductSuccess.jsp");
-			} else {
-				response.sendRedirect("addProductError.jsp");
-			}
+			productDao.update(product);
+			response.sendRedirect("product.jsp?page=1");
 		} else {
 			request.getRequestDispatcher("login.jsp").include(request, response);
 			out.print("Please login first");
 
 		}
+			
+			
 	}
 
 }

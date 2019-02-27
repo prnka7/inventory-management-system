@@ -21,19 +21,20 @@ public class LogoutController extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		 
-		
-		            response.setContentType("text/html");  
-		            PrintWriter out=response.getWriter();  
-		              
-		            request.getRequestDispatcher("index.jsp").include(request, response);  
-		              
-		            HttpSession session=request.getSession();  
-		            session.invalidate();  
-		              
-		            out.print("You are successfully logged out!");  
-		              
-		            out.close();  
-		     
+		PrintWriter out=response.getWriter();
+		request.getRequestDispatcher("index.jsp").include(request, response);
+
+		// invalidate the session if exists
+		HttpSession session = request.getSession(false);
+		if (session != null) {
+			session.invalidate();
+		}
+
+		out.print("You are successfully logged out!");
+
+		out.close();
+		Runtime.getRuntime().addShutdownHook(
+				new Thread(() -> com.emxcel.web.dao.PersistenceManager.getInstance().close()));
 	}
 
 	

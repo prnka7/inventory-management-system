@@ -1,39 +1,57 @@
 package com.emxcel.InventoryProduct.model;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.io.Serializable;
 import javax.persistence.*;
+import java.util.List;
 
+
+/**
+ * The persistent class for the tbl_permission database table.
+ * 
+ */
 @Entity
 @Table(name="tbl_permission")
-public class Permission {
+@NamedQuery(name="Permission.findAll", query="SELECT p FROM Permission p")
+public class Permission implements Serializable {
+	private static final long serialVersionUID = 1L;
+
 	@Id
-	private long permission_id;
-	
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@Column(name="permission_id")
+	private Long permissionId;
+
 	@Column(name="permission_name")
-	private String permission_name;
-	
-	public long getPermission_id() {
-		return permission_id;
+	private String permissionName;
+
+	//bi-directional many-to-many association to Role
+	@ManyToMany(mappedBy="tblPermissions")
+	private List<Role> tblRoles;
+
+	public Permission() {
 	}
-	public void setPermission_id(long permission_id) {
-		this.permission_id = permission_id;
+
+	public Long getPermissionId() {
+		return this.permissionId;
 	}
-	public String getPermission_name() {
-		return permission_name;
+
+	public void setPermissionId(Long permissionId) {
+		this.permissionId = permissionId;
 	}
-	public void setPermission_name(String permission_name) {
-		this.permission_name = permission_name;
+
+	public String getPermissionName() {
+		return this.permissionName;
 	}
-	@ManyToMany
-	@JoinTable(
-			name="tbl_permission_role",
-			joinColumns=@JoinColumn(name="permission_id"),
-			inverseJoinColumns=@JoinColumn(name="role_id"))
-	Set<Role> likedrole_permission=new HashSet<>();
-	@Override
-	public String toString() {
-		return "Permission [permission_id=" + permission_id + ", permission_name=" + permission_name + "]";
+
+	public void setPermissionName(String permissionName) {
+		this.permissionName = permissionName;
+	}
+
+	public List<Role> getTblRoles() {
+		return this.tblRoles;
+	}
+
+	public void setTblRoles(List<Role> tblRoles) {
+		this.tblRoles = tblRoles;
 	}
 
 }

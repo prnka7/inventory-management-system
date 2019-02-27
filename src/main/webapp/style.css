@@ -1,0 +1,88 @@
+@charset "ISO-8859-1";
+
+.role{
+		text-decoration: none;
+}
+ul {
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+	overflow: hidden;
+	background-color: #73BEFF;
+}
+
+li {
+	float: left;
+}
+
+li a {
+	display: inline-block;
+	color: white;
+	text-align: center;
+	padding: 14px 16px;
+	text-decoration: none;
+}
+
+li a:hover {
+	background-color: #41A7FF;
+}
+
+.active {
+	background-color: #0080ff;
+}
+
+.button {
+	background-color: #73BEFF;
+	border: none;
+	color: white;
+	padding: 10px 20px;
+	text-align: center;
+	font-size: 16px;
+	cursor: pointer;
+	text-decoration: none;
+	float: right;
+	margin-top: -4%;
+	margin-right: 2%;
+	border-radius: 4px;
+}
+
+.button:hover {
+	background-color: #41A7FF;
+}
+
+.link {
+	background-color: #3CB371;
+	border: none;
+	color: white;
+	padding: 10px 20px;
+	text-align: center;
+	font-size: 16px;
+	cursor: pointer;
+	text-decoration: none;
+	border-radius: 4px;
+}
+
+.link:hover {
+	background-color: #2E8B57;
+}
+
+table {
+	font-family: arial, sans-serif;
+	border-collapse: collapse;
+	width: 60%;
+	padding-top: 5px;
+}
+
+td, th {
+	border: 1px solid #dddddd;
+	text-align: left;
+	padding: 8px;
+}
+
+tr:nth-child(even) {
+	background-color: #dddddd;
+}
+
+.searchform {
+	padding: 20px 0px;
+}

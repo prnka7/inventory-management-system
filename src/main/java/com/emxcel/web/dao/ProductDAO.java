@@ -1,49 +1,87 @@
 package com.emxcel.web.dao;
-
+/**
+ * 
+ */
 import java.util.List;
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.EntityTransaction;
-import javax.persistence.Persistence;
-
+import javax.persistence.Query;
 import com.emxcel.InventoryProduct.model.Product;
 
+/**
+ * @author Priyanka Dodiya
+ *
+ *
+ */
 public class ProductDAO {
-	EntityManagerFactory emf = Persistence.createEntityManagerFactory("InventoryManagement");
-	EntityManager em = emf.createEntityManager();
-	EntityTransaction transaction = em.getTransaction();
+	private final EntityManager entityManager;
 
-Product p=new Product();
-	public void save(Product product) {
-
-		transaction.begin();
-		em.persist(product);
-		transaction.commit();
-		System.out.println("Added");
-		em.close();
-	}
-	public void delete(long id)
-	{
-		transaction.begin();
-		em.remove(em.find(Product.class,id));
-		transaction.commit();
-		System.out.println("Removed");
-		em.close();
-	}
-	public List<Product> show() {
-		@SuppressWarnings("unchecked")
-		List<Product> listproduct = em.createQuery("SELECT p FROM Product p").getResultList();
-		em.close();
-			return listproduct;
-	}
-	public void update(Product product)
-	{
-		transaction.begin();
-		em.merge(product);
-		transaction.commit();
-		System.out.println("Updated");
-		em.close();
-		
+	public ProductDAO() {
+		entityManager = PersistenceManager.getInstance().getEntityManager();
 	}
 
+	public Product getProduct(Long id) {
+		return entityManager.find(Product.class, id);
+	}
+
+	public int getProductCount() {
+		Query query = entityManager.createNamedQuery("Product.findAll", Product.class);
+		int totalproducts = query.getResultList().size();
+		System.out.println(totalproducts);
+		return totalproducts;
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<Product> getAllProducts(int start, int total) {
+		Query query = entityManager.createNamedQuery("Product.findAll", Product.class);
+		query.setFirstResult(start - 1);
+		query.setMaxResults(total);
+		List<Product> results = query.getResultList();
+		// return entityManager.createNamedQuery("Product.findAll",
+		// Product.class).getResultList();
+		return results;
+	}
+
+
+	public boolean create(Product product) {
+		try {
+			entityManager.getTransaction().begin();
+			entityManager.persist(product);
+			entityManager.getTransaction().commit();
+			return entityManager.contains(product);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			entityManager.getTransaction().rollback();
+			return false;
+		}
+
+	}
+
+	public void update(Product product) {
+		try {
+			entityManager.getTransaction().begin();
+
+			product = entityManager.merge(product);
+			entityManager.getTransaction().commit();
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			entityManager.getTransaction().rollback();
+		}
+	}
+
+
+	public void delete(long id) {
+		try {
+			entityManager.getTransaction().begin();
+			entityManager.remove(entityManager.find(Product.class, id));
+			entityManager.getTransaction().commit();
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			entityManager.getTransaction().rollback();
+		}
+	}
+
+	public List<Product> getProductFromProductName(String productName) {
+		return entityManager.createNamedQuery("Product.searchByName", Product.class)
+				.setParameter("productName", productName).getResultList();
+	}
 }

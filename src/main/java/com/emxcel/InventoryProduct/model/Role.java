@@ -2,16 +2,45 @@ package com.emxcel.InventoryProduct.model;
 
 import javax.persistence.*;
 
+import java.io.Serializable;
 import java.util.List;
 
 @Entity
 @Table(name = "tbl_role")
-public class Role {
+@NamedQuery(name="Role.findAll", query="SELECT r FROM Role r")
+public class Role implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@Column(name="role_id")
 	private long role_id;
 
+	@Column(name="role_name")
 	private String role_name;
 
+	@ManyToMany
+	@JoinTable(
+		name="tbl_permission_role"
+		, joinColumns={
+			@JoinColumn(name="role_id")
+			}
+		, inverseJoinColumns={
+			@JoinColumn(name="permission_id")
+			}
+		)
+	private List<Permission> tblPermissions;
+	
+	@ManyToMany(mappedBy="tblRoles")
+	private List<User> tblUsers;
+	
+	public Role()
+	{
+		
+	}
 	public long getRole_id() {
 		return role_id;
 	}
@@ -28,34 +57,20 @@ public class Role {
 		this.role_name = role_name;
 	}
 
-	@ManyToMany(mappedBy = "likedrole_permission")
-	List<Permission> likedpermission_role;
-	@ManyToMany(mappedBy = "likedrole_user")
-	List<User> likeduser_role;
-
-	public List<Permission> getLikedpermission_role() {
-		return likedpermission_role;
+	public List<Permission> getTblPermissions() {
+		return this.tblPermissions;
 	}
 
-	public void setLikedpermission_role(List<Permission> likedpermission_role) {
-		this.likedpermission_role = likedpermission_role;
+	public void setTblPermissions(List<Permission> tblPermissions) {
+		this.tblPermissions = tblPermissions;
 	}
 
-	public List<User> getLikeduser_role() {
-		return likeduser_role;
+	public List<User> getTblUsers() {
+		return this.tblUsers;
 	}
 
-	public void setLikeduser_role(List<User> likeduser_role) {
-		this.likeduser_role = likeduser_role;
-	}
-
-	public void setRole_id(long role_id) {
-		this.role_id = role_id;
-	}
-
-	@Override
-	public String toString() {
-		return "Role [role_id=" + role_id + ", role_name=" + role_name + "]";
+	public void setTblUsers(List<User> tblUsers) {
+		this.tblUsers = tblUsers;
 	}
 
 }
